@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "SF-Pro";
+  src: url(SF-Pro-Text-Ultralight.otf);
+}
+
+:root {
+  --start-button-color: rgba(0, 255, 0, 0.2);
+  --stop-button-color: rgba(255, 0, 0, 0.2);
+  --initial-lap-button-color: rgba(153, 153, 153, 0.13);
+  --initial-lap-text-color: rgba(255, 255, 255, 0.5);
+  --resetLap-button-color: rgba(153, 153, 153, 0.3);
+  --fastest-lap-color: green;
+  --slowest-lap-color: red;
+  --lap-border-color: rgb(37, 37, 37);
+  --scrollbar-color: rgb(102, 102, 102);
+  --text-color: rgb(255, 255, 255);
+  --main-background-color: black;
+  --on-click-transition-color: rgba(20, 20, 20, 0.5);
+}
+
+body {
+  background-color: var(--main-background-color);
+  padding: 0;
+  margin: 0;
+}
+
+#setTime {
+  color: var(--text-color);
+  font-size: 80px;
+  font-family: "SF-Pro";
+  font-variant-numeric: tabular-nums;
+  margin-top: 130px;
+  text-align: center;
+  user-select: none;
+}
+
+button {
+  font-size: 16px;
+  font-family: "SF-Pro";
+  font-weight: bold;
+  border-radius: 50%;
+  height: 85px;
+  width: 85px;
+}
+
+.buttons {
+  margin-top: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+}
+
+#resetLapButton:active {
+  background-color: var(--on-click-transition-color);
+}
+
+#startStopButton:active {
+  background-color: var(--on-click-transition-color);
+}
+
+.startButton {
+  background-color: var(--start-button-color);
+  color: rgb(0, 255, 0);
+  border: double 7.5px black;
+  margin-right: 15px;
+}
+
+.stopButton {
+  background-color: var(--stop-button-color);
+  color: rgb(255, 0, 0);
+  border: double 7.5px black;
+  margin-right: 15px;
+}
+
+.initialLapButton {
+  background-color: var(--initial-lap-button-color);
+  color: var(--initial-lap-text-color);
+  border: double 7.5px black;
+  margin-left: 15px;
+}
+
+.resetLapButton {
+  background-color: var(--resetLap-button-color);
+  color: var(--text-color);
+  border: double 7.5px black;
+  margin-left: 15px;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: 16px;
+  font-family: "SF-Pro";
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-color);
+  user-select: none;
+}
+
+#table {
+  margin-top: 18px;
+  margin-left: 15px;
+  max-height: 300px;
+  overflow: auto;
+}
+
+td {
+  width: 68px;
+  height: 19px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 209px;
+}
+
+.fastestLap {
+  color: var(--fastest-lap-color);
+}
+
+.slowestLap {
+  color: var(--slowest-lap-color);
+}
+
+td:first-child {
+  padding-left: 0;
+  margin-left: 15px;
+}
+
+tr {
+  border-top: 1px solid var(--lap-border-color);
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-color);
+  border-radius: 50px;
+}
