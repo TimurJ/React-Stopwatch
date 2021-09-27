@@ -9,7 +9,6 @@ import "./style.css";
 let milliseconds = 0;
 let seconds = 0;
 let minutes = 0;
-const startTime = Date.now();
 
 const convertTime = (time) => {
   milliseconds = Math.floor(time) % 1000;
@@ -31,9 +30,15 @@ const App = () => {
   console.log(elapsedTime);
 
   useEffect(() => {
-    // setInterval(() => {
-    //   setElapsedTime(Date.now() - startTime);
-    // }, 100);
+    const startTime = Date.now();
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setElapsedTime(Date.now() - startTime);
+      }, 16);
+    } else {
+      clearInterval(interval);
+    }
   }, []);
 
   // const [isPaused, setIsPaused] = useState(false);
