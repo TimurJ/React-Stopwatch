@@ -73,7 +73,7 @@ button {
   margin-right: 15px;
 }
 
-.initialLapButton {
+button:disabled {
   background-color: var(--initial-lap-button-color);
   color: var(--initial-lap-text-color);
   border: double 7.5px black;
