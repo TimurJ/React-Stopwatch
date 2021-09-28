@@ -1,66 +1,66 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 
-// render App
-// something happens = event handler triggers
-// apply some logic
-// oh I need to re-render
-// tell react to rerender -> here's the value for when you do that
-let milliseconds = 0;
-let seconds = 0;
-let minutes = 0;
-
 const convertTime = (time) => {
-  milliseconds = Math.floor(time) % 1000;
-  seconds = Math.floor(time / 1000) % 60;
-  minutes = Math.floor(time / 60000) % 60;
-
-  return `${padNumbers(minutes)}:${padNumbers(seconds)}.${padNumbers(
-    Math.floor(milliseconds / 10)
-  )}`;
+  let milliseconds = Math.floor(time) % 1000;
+  let seconds = Math.floor(time / 1000) % 60;
+  let minutes = Math.floor(time / 60000) % 60;
+  return `${padNumbers(minutes)}:${padNumbers(seconds)}.${padNumbers(Math.floor(milliseconds / 10))}`;
 };
 
 const padNumbers = (number) => {
   return number.toString().padStart(2, 0);
 };
 
-const App = () => {
+function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
-  console.log(elapsedTime);
+  const [activeLapTime, setActiveLapTime] = useState(0);
+  const [lapNumber, setLapNumber] = useState(0);
 
   useEffect(() => {
-    const startTime = Date.now();
-    let interval;
     if (isRunning) {
-      interval = setInterval(() => {
+      const startTime = Date.now() - elapsedTime;
+      const lapStartTime = Date.now() - activeLapTime;
+
+      const interval = setInterval(() => {
         setElapsedTime(Date.now() - startTime);
+        setActiveLapTime(Date.now() - lapStartTime);
       }, 16);
-    } else {
-      clearInterval(interval);
+
+      return () => clearInterval(interval);
     }
-  }, []);
+  }, [isRunning]);
 
-  // const [isPaused, setIsPaused] = useState(false);
+  const reset = () => {
+    if (!isRunning) {
+      setElapsedTime(0);
+      setActiveLapTime(0);
+    }
+  };
 
-  // const handlePause = () => {};
-
-  // const handleResume = () => {};
-
-  // const handleReset = () => {};
+  const saveLap = () => {
+    if (isRunning) {
+      lapStartTime = 0;
+    }
+  };
 
   return (
     <div>
-      <div id="setTime">{convertTime(elapsedTime)}</div>
+      <div class="time">{convertTime(elapsedTime)}</div>
 
       <div className="buttons">
-        <button className="resetLapButton" disabled={!elapsedTime}>
+        <button
+          className="resetLapButton"
+          disabled={!elapsedTime}
+          onClick={() => {
+            reset();
+            saveLap();
+          }}
+        >
           {isRunning ? "Lap" : "Reset"}
         </button>
-        <button
-          className="startButton"
-          onClick={() => setIsRunning(!isRunning)}
-        >
+        <button className={isRunning ? "stopButton" : "startButton"} onClick={() => setIsRunning(!isRunning)}>
           {isRunning ? "Stop" : "Start"}
         </button>
       </div>
@@ -69,8 +69,8 @@ const App = () => {
         <table id="lapTable">
           <tbody>
             <tr>
-              <td></td>
-              <td></td>
+              <td>Lap 1</td>
+              <td>{convertTime(activeLapTime)}</td>
             </tr>
             <tr>
               <td></td>
@@ -97,6 +97,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;
