@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./style.css";
 
 const convertTime = (time) => {
@@ -15,39 +15,60 @@ const padNumbers = (number) => {
 function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [activeLapTime, setActiveLapTime] = useState(0);
+  const [activeLap, setActiveLap] = useState(0);
+  const [lapTime, setLapTime] = useState([]);
   const [lapNumber, setLapNumber] = useState(0);
+  const [fastestLap, setFastestLap] = useState(0);
+  const [slowestLap, setSlowestLap] = useState(0);
 
   useEffect(() => {
     if (isRunning) {
       const startTime = Date.now() - elapsedTime;
-      const lapStartTime = Date.now() - activeLapTime;
+      const lapStartTime = Date.now() - activeLap;
 
       const interval = setInterval(() => {
         setElapsedTime(Date.now() - startTime);
-        setActiveLapTime(Date.now() - lapStartTime);
+        setActiveLap(Date.now() - lapStartTime);
       }, 16);
 
       return () => clearInterval(interval);
     }
-  }, [isRunning]);
+  }, [isRunning, lapTime]);
 
   const reset = () => {
     if (!isRunning) {
       setElapsedTime(0);
-      setActiveLapTime(0);
+      setActiveLap(0);
+      setLapTime([]);
+      setLapNumber(0);
     }
   };
 
   const saveLap = () => {
     if (isRunning) {
-      lapStartTime = 0;
+      setLapTime((lapTime) => [activeLap, ...lapTime]);
+      setLapNumber((lapNumber) => lapNumber + 1);
+      setActiveLap(0);
+    }
+  };
+
+  const fastestSlowestLap = (time) => {
+    if (lapNumber > 2) {
+      if (time > slowestLap) {
+        setSlowestLap(time);
+        return "slowestLap";
+      }
+
+      if (time < fastestLap) {
+        setFastestLap(time);
+        return "fastestLap";
+      }
     }
   };
 
   return (
     <div>
-      <div class="time">{convertTime(elapsedTime)}</div>
+      <div className="time">{convertTime(elapsedTime)}</div>
 
       <div className="buttons">
         <button
@@ -65,33 +86,22 @@ function App() {
         </button>
       </div>
 
-      <div id="table">
-        <table id="lapTable">
+      <div className="lapTable">
+        <table>
           <tbody>
             <tr>
-              <td>Lap 1</td>
-              <td>{convertTime(activeLapTime)}</td>
+              <td>Lap {lapNumber + 1}</td>
+              <td>{convertTime(activeLap)}</td>
             </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
+            {lapTime.map((element, index) => {
+              console.log(fastestSlowestLap(element));
+              return (
+                <tr className={fastestSlowestLap(element)} key={lapNumber - index}>
+                  <td>Lap {lapNumber - index}</td>
+                  <td>{convertTime(element)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

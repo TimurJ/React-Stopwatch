@@ -52,11 +52,15 @@ button {
   user-select: none;
 }
 
-#resetLapButton:active {
+.resetLapButton:active {
   background-color: var(--on-click-transition-color);
 }
 
-#startStopButton:active {
+.startButton:active {
+  background-color: var(--on-click-transition-color);
+}
+
+.stopButton:active {
   background-color: var(--on-click-transition-color);
 }
 
@@ -98,10 +102,10 @@ table {
   user-select: none;
 }
 
-#table {
+.lapTable {
   margin-top: 18px;
   margin-left: 15px;
-  max-height: 300px;
+  max-height: 310px;
   overflow: auto;
 }
 
