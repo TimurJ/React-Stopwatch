@@ -1,26 +1,15 @@
 import { useState, useEffect } from "react";
 import "./style.css";
-
-const convertTime = (time) => {
-  let milliseconds = Math.floor(time) % 1000;
-  let seconds = Math.floor(time / 1000) % 60;
-  let minutes = Math.floor(time / 60000) % 60;
-  return `${padNumbers(minutes)}:${padNumbers(seconds)}.${padNumbers(Math.floor(milliseconds / 10))}`;
-};
-
-const padNumbers = (number) => {
-  return number.toString().padStart(2, 0);
-};
-
-let fastestLap = 0;
-let slowestLap = 0;
+import { convertTime } from "./utils";
 
 function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
+
   const [activeLap, setActiveLap] = useState(0);
+  const [fastestLap, setFastestLap] = useState(0);
+  const [slowestLap, setSlowestLap] = useState(0);
   const [lapTime, setLapTime] = useState([]);
-  const [lapNumber, setLapNumber] = useState(0);
 
   useEffect(() => {
     if (isRunning) {
@@ -37,62 +26,53 @@ function App() {
   }, [isRunning, lapTime]);
 
   const reset = () => {
-    if (!isRunning) {
-      setElapsedTime(0);
-      setActiveLap(0);
-      setLapTime([]);
-      setLapNumber(0);
-      slowestLap = 0;
-      fastestLap = 0;
-    }
+    setElapsedTime(0);
+    setActiveLap(0);
+    setSlowestLap(0);
+    setFastestLap(0);
+    setLapTime([]);
   };
 
   const saveLap = () => {
-    if (isRunning) {
-      setLapTime((lapTime) => [activeLap, ...lapTime]);
-      setLapNumber((lapNumber) => lapNumber + 1);
-      setActiveLap(0);
-      console.log(fastestSlowestLap(lapTime[0]));
-    }
+    setLapTime((lapTime) => [activeLap, ...lapTime]);
+    setActiveLap(0);
   };
 
   const fastestSlowestLap = (time) => {
+    const lapNumber = lapTime.length;
+
     if (lapNumber === 1) {
-      fastestLap = time;
+      setFastestLap(10);
     }
+
     if (lapNumber === 2) {
-      if (fastestLap >= time) {
-        slowestLap = fastestLap;
-        fastestLap = time;
+      if (fastestLap > time) {
+        setSlowestLap(fastestLap);
+        setFastestLap(time);
+      } else {
+        setSlowestLap(time);
       }
     }
 
     if (lapNumber >= 2) {
       if (time <= fastestLap) {
-        fastestLap = time;
+        setFastestLap(time);
         return "fastestLap";
-      }
-
-      if (time >= slowestLap) {
-        slowestLap = time;
+      } else if (time >= slowestLap) {
+        setSlowestLap(time);
         return "slowestLap";
       }
     }
   };
+
+  const resetLapHandler = isRunning ? saveLap : reset;
 
   return (
     <div>
       <div className="time">{convertTime(elapsedTime)}</div>
 
       <div className="buttons">
-        <button
-          className="resetLapButton"
-          disabled={!elapsedTime}
-          onClick={() => {
-            reset();
-            saveLap();
-          }}
-        >
+        <button className="resetLapButton" disabled={!elapsedTime} onClick={resetLapHandler}>
           {isRunning ? "Lap" : "Reset"}
         </button>
         <button className={isRunning ? "stopButton" : "startButton"} onClick={() => setIsRunning(!isRunning)}>
@@ -104,14 +84,14 @@ function App() {
         <table>
           <tbody>
             <tr>
-              <td>Lap {lapNumber + 1}</td>
+              <td>Lap {lapTime.length + 1}</td>
               <td>{convertTime(activeLap)}</td>
             </tr>
             {lapTime.map((element, index) => {
-              console.log(fastestSlowestLap(element));
+              const lapNumber = lapTime.length - index;
               return (
-                <tr className={fastestSlowestLap(element)} key={lapNumber - index}>
-                  <td>Lap {lapNumber - index}</td>
+                <tr key={lapNumber}>
+                  <td>Lap {lapNumber}</td>
                   <td>{convertTime(element)}</td>
                 </tr>
               );
