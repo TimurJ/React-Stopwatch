@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
 import "./style.css";
-import { convertTime } from "./utils";
+import { useState, useEffect } from "react";
+import DisplayTime from "./DisplayTime";
+import Buttons from "./Buttons";
+import LapTable from "./LapTable";
 
-function App() {
+const App = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   const [activeLap, setActiveLap] = useState(0);
-  const [fastestLap, setFastestLap] = useState(0);
-  const [slowestLap, setSlowestLap] = useState(0);
-  const [lapTime, setLapTime] = useState([]);
+  const [lapTimes, setLapTimes] = useState([]);
 
   useEffect(() => {
     if (isRunning) {
@@ -23,84 +23,34 @@ function App() {
 
       return () => clearInterval(interval);
     }
-  }, [isRunning, lapTime]);
+  }, [isRunning, lapTimes]);
 
-  // const reset = () => {
-  //   setElapsedTime(0);
-  //   setActiveLap(0);
-  //   setSlowestLap(0);
-  //   setFastestLap(0);
-  //   setLapTime([]);
-  // };
+  const reset = () => {
+    setElapsedTime(0);
+    setActiveLap(0);
+    setLapTimes([]);
+  };
 
   const saveLap = () => {
-    setLapTime((lapTime) => [activeLap, ...lapTime]);
+    setLapTimes((lapTimes) => [activeLap, ...lapTimes]);
     setActiveLap(0);
   };
 
-  const fastestSlowestLap = (time) => {
-    const lapNumber = lapTime.length;
-
-    if (lapNumber === 1) {
-      setFastestLap(10);
-    }
-
-    if (lapNumber === 2) {
-      if (fastestLap > time) {
-        setSlowestLap(fastestLap);
-        setFastestLap(time);
-      } else {
-        setSlowestLap(time);
-      }
-    }
-
-    if (lapNumber >= 2) {
-      if (time <= fastestLap) {
-        setFastestLap(time);
-        return "fastestLap";
-      } else if (time >= slowestLap) {
-        setSlowestLap(time);
-        return "slowestLap";
-      }
-    }
+  const handleStartStop = () => {
+    setIsRunning(!isRunning);
   };
 
-  const resetLapHandler = isRunning ? saveLap : reset;
+  const handleResetLap = isRunning ? saveLap : reset;
 
   return (
     <div>
-      <div className="time">{convertTime(elapsedTime)}</div>
+      <DisplayTime elapsedTime={elapsedTime} />
 
-      <div className="buttons">
-        <button className="resetLapButton" disabled={!elapsedTime} onClick={resetLapHandler}>
-          {isRunning ? "Lap" : "Reset"}
-        </button>
-        <button className={isRunning ? "stopButton" : "startButton"} onClick={() => setIsRunning(!isRunning)}>
-          {isRunning ? "Stop" : "Start"}
-        </button>
-      </div>
+      <Buttons elapsedTime={elapsedTime} isRunning={isRunning} handleResetLap={handleResetLap} handleStartStop={handleStartStop} />
 
-      <div className="lapTable">
-        <table>
-          <tbody>
-            <tr>
-              <td>Lap {lapTime.length + 1}</td>
-              <td>{convertTime(activeLap)}</td>
-            </tr>
-            {lapTime.map((element, index) => {
-              const lapNumber = lapTime.length - index;
-              return (
-                <tr key={lapNumber}>
-                  <td>Lap {lapNumber}</td>
-                  <td>{convertTime(element)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <LapTable lapTimes={lapTimes} activeLap={activeLap} />
     </div>
   );
-}
+};
 
 export default App;
