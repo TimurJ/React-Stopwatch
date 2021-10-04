@@ -25,13 +25,13 @@ function App() {
     }
   }, [isRunning, lapTime]);
 
-  const reset = () => {
-    setElapsedTime(0);
-    setActiveLap(0);
-    setSlowestLap(0);
-    setFastestLap(0);
-    setLapTime([]);
-  };
+  // const reset = () => {
+  //   setElapsedTime(0);
+  //   setActiveLap(0);
+  //   setSlowestLap(0);
+  //   setFastestLap(0);
+  //   setLapTime([]);
+  // };
 
   const saveLap = () => {
     setLapTime((lapTime) => [activeLap, ...lapTime]);
