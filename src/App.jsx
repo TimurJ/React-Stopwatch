@@ -1,5 +1,5 @@
 import "./style.css"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import DisplayTime from "./DisplayTime"
 import Buttons from "./Buttons"
 import LapTable from "./LapTable"
@@ -8,24 +8,23 @@ import useTimer from "./useTimer"
 const App = () => {
   const [isRunning, setIsRunning] = useState(false)
   const [lapTimes, setLapTimes] = useState([])
+
   const [elapsedTime, activeLap, resetActiveLap, resetElapsedTime] = useTimer(isRunning, lapTimes)
 
-  const reset = () => {
-    resetElapsedTime()
-    resetActiveLap()
-    setLapTimes([])
-  }
-
-  const saveLap = () => {
-    setLapTimes((lapTimes) => [activeLap, ...lapTimes])
-    resetActiveLap()
+  const handleResetLap = () => {
+    if (isRunning) {
+      setLapTimes((lapTimes) => [activeLap, ...lapTimes])
+      resetActiveLap()
+    } else {
+      resetElapsedTime()
+      resetActiveLap()
+      setLapTimes([])
+    }
   }
 
   const handleStartStop = () => {
     setIsRunning(!isRunning)
   }
-
-  const handleResetLap = isRunning ? saveLap : reset
 
   return (
     <div>

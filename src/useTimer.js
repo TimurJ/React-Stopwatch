@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const useTimer = (isRunning, lapTimes) => {
   const [elapsedTime, setElapsedTime] = useState(0)
