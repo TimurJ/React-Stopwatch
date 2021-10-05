@@ -3,37 +3,22 @@ import { useState, useEffect } from "react"
 import DisplayTime from "./DisplayTime"
 import Buttons from "./Buttons"
 import LapTable from "./LapTable"
+import useTimer from "./useTimer"
 
 const App = () => {
   const [isRunning, setIsRunning] = useState(false)
-  const [elapsedTime, setElapsedTime] = useState(0)
-
-  const [activeLap, setActiveLap] = useState(0)
   const [lapTimes, setLapTimes] = useState([])
-
-  useEffect(() => {
-    if (isRunning) {
-      const startTime = Date.now() - elapsedTime
-      const lapStartTime = Date.now() - activeLap
-
-      const interval = setInterval(() => {
-        setElapsedTime(Date.now() - startTime)
-        setActiveLap(Date.now() - lapStartTime)
-      }, 10)
-
-      return () => clearInterval(interval)
-    }
-  }, [isRunning, lapTimes])
+  const [elapsedTime, activeLap, resetActiveLap, resetElapsedTime] = useTimer(isRunning, lapTimes)
 
   const reset = () => {
-    setElapsedTime(0)
-    setActiveLap(0)
+    resetElapsedTime()
+    resetActiveLap()
     setLapTimes([])
   }
 
   const saveLap = () => {
     setLapTimes((lapTimes) => [activeLap, ...lapTimes])
-    setActiveLap(0)
+    resetActiveLap()
   }
 
   const handleStartStop = () => {
