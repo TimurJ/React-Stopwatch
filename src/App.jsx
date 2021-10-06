@@ -5,25 +5,10 @@ import Buttons from "./Buttons"
 import LapTable from "./LapTable"
 import useTimer from "./useTimer"
 
-const ACTIONS = {
-  IS_RUNNING: "isRunning",
-}
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "1":
-      return {}
-    case "2":
-      return {}
-    default:
-      return state
-  }
-}
-
 const App = () => {
   const [isRunning, setIsRunning] = useState(false)
   const [lapTimes, setLapTimes] = useState([])
 
-  const [state, dispatch] = useReducer(reducer, { count: 0 })
   const [elapsedTime, activeLap, resetActiveLap, resetElapsedTime] = useTimer(isRunning, lapTimes)
 
   const handleResetLap = () => {
