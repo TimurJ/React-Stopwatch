@@ -25,7 +25,7 @@ const useTimer = (isRunning, lapTimes) => {
   const resetElapsedTime = () => {
     setElapsedTime(0)
   }
-  return [elapsedTime, activeLap, resetActiveLap, resetElapsedTime]
+  return { elapsedTime, activeLap, resetActiveLap, resetElapsedTime }
 }
 
 export default useTimer
