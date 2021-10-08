@@ -9,8 +9,8 @@
   --initial-lap-button-color: rgba(153, 153, 153, 0.13);
   --initial-lap-text-color: rgba(255, 255, 255, 0.5);
   --resetLap-button-color: rgba(153, 153, 153, 0.3);
-  --fastest-lap-color: green;
-  --slowest-lap-color: red;
+  --fastest-lap-color: rgb(0, 255, 0);
+  --slowest-lap-color: rgb(255, 0, 0);
   --lap-border-color: rgb(37, 37, 37);
   --scrollbar-color: rgb(102, 102, 102);
   --text-color: rgb(255, 255, 255);
@@ -23,7 +23,7 @@
   padding: 0;
   margin: auto;
   width: 380px;
-  height: 730px;
+  height: 770px;
   border-radius: 10px;
   box-shadow: 1px 1px 5px 1px #000000;
 }
@@ -48,7 +48,7 @@ button {
 }
 
 .buttons {
-  margin-top: 100px;
+  margin-top: 125px;
   text-align: center;
   display: flex;
   justify-content: space-between;
@@ -115,8 +115,8 @@ table {
 td {
   width: 68px;
   height: 19px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 12px;
+  padding-bottom: 12px;
   padding-left: 209px;
 }
 

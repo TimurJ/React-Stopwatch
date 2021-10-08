@@ -1,6 +1,6 @@
 import ActiveLap from "./ActiveLap"
-import { convertTime } from "./utils"
-import { fastestSlowestLap } from "./fastestSlowestLap"
+import LapTimes from "./LapTimes"
+import EmptyLaps from "./EmptyLaps"
 
 const LapTable = ({ lapTimes, activeLap }) => {
   return (
@@ -8,17 +8,8 @@ const LapTable = ({ lapTimes, activeLap }) => {
       <table>
         <tbody>
           {activeLap ? <ActiveLap activeLap={activeLap} lapTimes={lapTimes} /> : null}
-
-          {lapTimes.map((element, index) => {
-            const lapNumber = lapTimes.length - index
-            const lapClass = fastestSlowestLap(element, lapTimes.length)
-            return (
-              <tr className={lapClass} key={lapNumber}>
-                <td>Lap {lapNumber}</td>
-                <td>{convertTime(element)}</td>
-              </tr>
-            )
-          })}
+          <LapTimes lapTimes={lapTimes} />
+          <EmptyLaps lapTimes={lapTimes} activeLap={activeLap} />
         </tbody>
       </table>
     </div>
