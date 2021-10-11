@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.0",
+    "husky": "^7.0.2",
     "vite": "^2.5.4"
   }
 }
