@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 let fastestLap = 0
 let slowestLap = 0
 
