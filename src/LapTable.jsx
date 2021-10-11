@@ -1,6 +1,7 @@
 import ActiveLap from "./ActiveLap"
 import LapTimes from "./LapTimes"
 import EmptyLaps from "./EmptyLaps"
+import React from "react"
 
 const LapTable = ({ lapTimes, activeLap }) => {
   return (
