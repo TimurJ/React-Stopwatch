@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "react": "^17.0.0",
@@ -12,10 +13,16 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.3",
     "prettier": "2.4.1",
     "vite": "^2.5.4"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }

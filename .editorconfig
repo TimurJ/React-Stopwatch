@@ -1,6 +1,3 @@
 { 
-  semi: false,
-  printWidth: 120, // only for TypeScript, because of longer lines
-  singleQuote: true,
-  trailingComma: 'all',
+  
 }
