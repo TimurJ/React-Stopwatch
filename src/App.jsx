@@ -1,5 +1,5 @@
 import "./style.css"
-import { useReducer } from "react"
+import { useReducer} from "react"
 import DisplayTime from "./DisplayTime"
 import Buttons from "./Buttons"
 import LapTable from "./LapTable"
@@ -30,7 +30,7 @@ const reducer = (state, action) => {
 }
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const { elapsedTime, activeLap, resetActiveLap, resetElapsedTime } = useTimer(state.isRunning, state.lapTimes)
 

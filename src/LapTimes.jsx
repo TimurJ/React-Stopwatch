@@ -1,3 +1,4 @@
+import React from "react"
 import { convertTime } from "./utils"
 import { fastestSlowestLap } from "./fastestSlowestLap"
 

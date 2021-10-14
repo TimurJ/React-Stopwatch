@@ -5,28 +5,36 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "jest __tests__/ --coverage"
   },
   "dependencies": {
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
     "@vitejs/plugin-react": "^1.0.0",
+    "babel-jest": "^27.2.5",
     "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.2",
+    "jest": "^27.2.5",
     "lint-staged": "^11.2.3",
-    "prettier": "2.4.1",
+    "prettier": "^2.4.1",
     "vite": "^2.5.4"
   },
-  "husky": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
-    "*.js": "eslint --fix"
+    "*.{js,jsx}": "eslint --cache --fix"
   }
 }
