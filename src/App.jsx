@@ -1,106 +1,62 @@
-import { useState, useEffect } from "react";
-import "./style.css";
-import { convertTime } from "./utils";
+import "./style.css"
+import { useReducer} from "react"
+import DisplayTime from "./DisplayTime"
+import Buttons from "./Buttons"
+import LapTable from "./LapTable"
+import useTimer from "./useTimer"
 
-function App() {
-  const [isRunning, setIsRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
+const ACTIONS = {
+  START_STOP_TIMER: "start-timer",
+  CAPTURE_LAP_TIME: "capture-lap",
+  RESET: "reset",
+}
 
-  const [activeLap, setActiveLap] = useState(0);
-  const [fastestLap, setFastestLap] = useState(0);
-  const [slowestLap, setSlowestLap] = useState(0);
-  const [lapTime, setLapTime] = useState([]);
+const initialState = {
+  isRunning: false,
+  lapTimes: [],
+}
 
-  useEffect(() => {
-    if (isRunning) {
-      const startTime = Date.now() - elapsedTime;
-      const lapStartTime = Date.now() - activeLap;
+const reducer = (state, action) => {
+  switch (action.type) {
+    case ACTIONS.START_STOP_TIMER:
+      return { ...state, isRunning: !state.isRunning }
+    case ACTIONS.CAPTURE_LAP_TIME:
+      return { ...state, lapTimes: [action.payload, ...state.lapTimes] }
+    case ACTIONS.RESET:
+      return { isRunning: false, lapTimes: [] }
+    default:
+      return console.error("Action type not recognized")
+  }
+}
 
-      const interval = setInterval(() => {
-        setElapsedTime(Date.now() - startTime);
-        setActiveLap(Date.now() - lapStartTime);
-      }, 10);
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-      return () => clearInterval(interval);
+  const { elapsedTime, activeLap, resetActiveLap, resetElapsedTime } = useTimer(state.isRunning, state.lapTimes)
+
+  const handleResetLap = () => {
+    if (state.isRunning) {
+      dispatch({ type: ACTIONS.CAPTURE_LAP_TIME, payload: activeLap })
+      resetActiveLap()
+    } else {
+      resetElapsedTime()
+      resetActiveLap()
+      dispatch({ type: ACTIONS.RESET })
     }
-  }, [isRunning, lapTime]);
+  }
 
-  const reset = () => {
-    setElapsedTime(0);
-    setActiveLap(0);
-    setSlowestLap(0);
-    setFastestLap(0);
-    setLapTime([]);
-  };
-
-  const saveLap = () => {
-    setLapTime((lapTime) => [activeLap, ...lapTime]);
-    setActiveLap(0);
-  };
-
-  const fastestSlowestLap = (time) => {
-    const lapNumber = lapTime.length;
-
-    if (lapNumber === 1) {
-      setFastestLap(10);
-    }
-
-    if (lapNumber === 2) {
-      if (fastestLap > time) {
-        setSlowestLap(fastestLap);
-        setFastestLap(time);
-      } else {
-        setSlowestLap(time);
-      }
-    }
-
-    if (lapNumber >= 2) {
-      if (time <= fastestLap) {
-        setFastestLap(time);
-        return "fastestLap";
-      } else if (time >= slowestLap) {
-        setSlowestLap(time);
-        return "slowestLap";
-      }
-    }
-  };
-
-  const resetLapHandler = isRunning ? saveLap : reset;
+  const handleStartStop = () => {
+    dispatch({ type: ACTIONS.START_STOP_TIMER })
+  }
 
   return (
     <div>
-      <div className="time">{convertTime(elapsedTime)}</div>
+      <DisplayTime elapsedTime={elapsedTime} />
 
-      <div className="buttons">
-        <button className="resetLapButton" disabled={!elapsedTime} onClick={resetLapHandler}>
-          {isRunning ? "Lap" : "Reset"}
-        </button>
-        <button className={isRunning ? "stopButton" : "startButton"} onClick={() => setIsRunning(!isRunning)}>
-          {isRunning ? "Stop" : "Start"}
-        </button>
-      </div>
+      <Buttons isStarted={elapsedTime > 0} isRunning={state.isRunning} handleResetLap={handleResetLap} handleStartStop={handleStartStop} />
 
-      <div className="lapTable">
-        <table>
-          <tbody>
-            <tr>
-              <td>Lap {lapTime.length + 1}</td>
-              <td>{convertTime(activeLap)}</td>
-            </tr>
-            {lapTime.map((element, index) => {
-              const lapNumber = lapTime.length - index;
-              return (
-                <tr key={lapNumber}>
-                  <td>Lap {lapNumber}</td>
-                  <td>{convertTime(element)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      <LapTable lapTimes={state.lapTimes} activeLap={activeLap} />
     </div>
-  );
+  )
 }
-
-export default App;
+export default App
